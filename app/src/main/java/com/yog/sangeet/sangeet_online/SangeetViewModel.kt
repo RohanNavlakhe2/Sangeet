@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,5 +37,14 @@ class SangeetViewModel @Inject constructor(
             _videoInfoStateFlow.value = Resource.Error(e.message ?: "Something went wrong")
         }
 
+    }
+
+    fun convertMilisecondsToMinutesAndSeconds(milis:Long):String{
+        val min = (milis/1000)/60
+        val sec = (milis/1000)%60
+        val numberFormat = DecimalFormat("00")
+        var formattedMin = numberFormat.format(min)
+        var formattedSec = numberFormat.format(sec)
+        return "$formattedMin:$formattedSec"
     }
 }

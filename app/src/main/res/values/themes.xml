@@ -13,4 +13,15 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="PlayerTheme" parent="Theme.MaterialComponents.NoActionBar">
+       <!-- <item name="statusBarScrim">@color/sangeet_color</item>-->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/sangeet_color</item>
+    </style>
+    
+    <style name="SeekBarStyle" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">#ffffff</item>
+        <item name="android:progressTint">#ffffff</item>
+       <!-- <item name="android:thumbTint">#c51162</item>-->
+    </style>
 </resources>

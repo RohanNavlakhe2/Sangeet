@@ -3,8 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/ic_download.xml" value="0.1065" />
         <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/ic_music.xml" value="0.1065" />
+        <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/ic_pause.xml" value="0.1065" />
+        <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/ic_play.xml" value="0.1065" />
+        <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/ic_skip.xml" value="0.1065" />
+        <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/ic_skip_previous.xml" value="0.1065" />
         <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/music.xml" value="0.1065" />
+        <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/drawable/thumbnail_curved.xml" value="0.1065" />
         <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/layout/activity_exo_player.xml" value="0.17083333333333334" />
         <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/layout/activity_main.xml" value="0.17083333333333334" />
         <entry key="..\:/Projects/Other/Sangeet/app/src/main/res/layout/activity_sangeet_main.xml" value="0.17083333333333334" />

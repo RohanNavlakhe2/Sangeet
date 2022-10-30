@@ -11,36 +11,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/sangeet_color"
         tools:context=".ExoPlayerActivity">
-
-        <!--    <com.google.android.exoplayer2.ui.StyledPlayerView
-        android:id="@+id/exo_player_view"
-        android:layout_width="250dp"
-        android:layout_height="100dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ProgressBar
-            android:id="@+id/progrss_bar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center" />
-
-    </com.google.android.exoplayer2.ui.StyledPlayerView>-->
-
-        <Button
-            android:id="@+id/download"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
-            android:text="Download"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/videoInfoProgressBar"
@@ -54,22 +26,78 @@
 
         <TextView
             android:id="@+id/songNameTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="#ffffff"
+            app:fontFamily="@font/segoe_ui"
+            app:layout_constraintBottom_toTopOf="@+id/songThumbnailImageView"
+            app:layout_constraintEnd_toEndOf="@+id/songThumbnailImageView"
+            app:layout_constraintStart_toStartOf="@+id/songThumbnailImageView" />
+
+
+        <ImageView
+            android:id="@+id/songThumbnailImageView"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/download" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.31"
+            tools:srcCompat="@tools:sample/avatars" />
 
-        <Button
+        <SeekBar
+            android:id="@+id/songProgressSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:progressTint="#ffffff"
+            android:thumbTint="#ffffff"
+            app:layout_constraintEnd_toEndOf="@+id/songThumbnailImageView"
+            app:layout_constraintStart_toStartOf="@+id/songThumbnailImageView"
+            app:layout_constraintTop_toBottomOf="@+id/songThumbnailImageView" />
+
+        <ImageView
             android:id="@+id/songControllerBtn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="@+id/songProgressSeekBar"
+            app:layout_constraintStart_toStartOf="@+id/songProgressSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/songProgressSeekBar"
+            app:srcCompat="@drawable/ic_play" />
+
+        <TextView
+            android:id="@+id/songDurationTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Play/Pause"
-            app:layout_constraintEnd_toEndOf="@+id/songNameTxt"
-            app:layout_constraintStart_toStartOf="@+id/songNameTxt"
-            app:layout_constraintTop_toBottomOf="@+id/songNameTxt" />
+            android:layout_marginTop="8dp"
+            android:textColor="#ffffff"
+            app:fontFamily="@font/segoe_ui"
+            app:layout_constraintEnd_toEndOf="@+id/songProgressSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/songProgressSeekBar" />
+
+        <TextView
+            android:id="@+id/songCurrentTimeTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#ffffff"
+            app:fontFamily="@font/segoe_ui"
+            app:layout_constraintStart_toStartOf="@+id/songProgressSeekBar"
+            app:layout_constraintTop_toBottomOf="@+id/songProgressSeekBar" />
+
+        <ImageView
+            android:id="@+id/downloadSongImg"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="@+id/songThumbnailImageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_download" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
