@@ -1,12 +1,15 @@
 package com.yog.sangeet;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
 
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -120,16 +123,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED) {
-            loadMedia();
-            createFolderAndSongsPlaylist();
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{
-                            READ_EXTERNAL_STORAGE
-                    }, 1);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if (ContextCompat.checkSelfPermission(this, READ_MEDIA_AUDIO) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                loadMedia();
+                createFolderAndSongsPlaylist();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                READ_MEDIA_AUDIO
+                        }, 1);
+            }
+
+            if(ContextCompat.checkSelfPermission(this,POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                               POST_NOTIFICATIONS
+                        }, 1);
+            }
+        }else{
+            if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                loadMedia();
+                createFolderAndSongsPlaylist();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                READ_EXTERNAL_STORAGE
+                        }, 1);
+            }
         }
+
 
     }
 
@@ -139,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 1:
-                if (grantResults.length == 1) {
+                if (grantResults.length >= 1) {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         loadMedia();
                         createFolderAndSongsPlaylist();
