@@ -36,7 +36,7 @@ import com.yog.sangeet.databinding.PlaylistXmlBinding;
 
 import java.util.ArrayList;
 
-public class RecyclerPlaylist extends RecyclerView.Adapter{
+public class RecyclerPlaylist extends RecyclerView.Adapter<RecyclerPlaylist.Holder> {
     MusicList musicList;
     MainActivity mainActivity;
     String whichView;
@@ -62,7 +62,7 @@ public class RecyclerPlaylist extends RecyclerView.Adapter{
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=null;
         View view=null;
         if(whichView.equals("folder_view")) {
@@ -77,16 +77,17 @@ public class RecyclerPlaylist extends RecyclerView.Adapter{
         }
         RecyclerView.LayoutParams layoutParams=new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(layoutParams);
-        return new RecyclerView.ViewHolder(view) {
+        return new Holder(view);
+       /* return new RecyclerView.ViewHolder(view) {
             @Override
             public String toString() {
                 return super.toString();
             }
-        };
+        };*/
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder,final int position) {
+    public void onBindViewHolder(@NonNull final Holder holder,final int position) {
         if(whichView.equals("folder_view")){
           folderBinding.folerName.setText(folderList.get(position));
           folderBinding.folderCard.setOnClickListener(new View.OnClickListener() {
@@ -182,6 +183,13 @@ public class RecyclerPlaylist extends RecyclerView.Adapter{
         else{
             return BitmapFactory.decodeResource(Resources.getSystem(),R.drawable.music);//not working
             //image.setImageResource(R.drawable.music);
+        }
+    }
+
+    static class Holder extends RecyclerView.ViewHolder{
+
+        public Holder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }

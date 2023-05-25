@@ -6,54 +6,91 @@
     android:layout_height="match_parent"
     tools:context=".MusicList">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/songs_list"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/song_list_bg_1" />
+
+    <TextView
+        android:id="@+id/sangeet_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:drawableStart="@drawable/music_2"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/black"
+        android:fontFamily="@font/segoe_bold_italic"
+        android:text="sangeet"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/folderNameTxtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sangeet_title"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/segoe_bold"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/songs_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/running_song_card"
+        android:layout_below="@id/folderNameTxtView"
+        android:layout_marginTop="15dp" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/running_song_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"
-        android:id="@+id/running_song_card"
-        >
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/yellow"
+        app:cardCornerRadius="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:weightSum="100"
-            android:background="#000000"
-            >
+            android:padding="18dp"
+            android:weightSum="100">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp"
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/running_song_image"
-                android:layout_weight="10"
-                />
-            <TextView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_weight="80"
+                android:layout_marginEnd="5dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearance="@style/Image15dpCurved" />
+
+            <TextView
                 android:id="@+id/running_song_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="100"
+                android:fontFamily="@font/segoe_bold"
+                android:maxLines="2"
                 android:textColor="#ffffff"
-                 />
+                android:textSize="15sp" />
+
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
+                android:id="@+id/running_song_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:padding="0dp"
-                android:id="@+id/running_song_button"
-                android:layout_weight="10"
-                 />
+                android:scaleType="fitXY" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-
-
 </RelativeLayout>

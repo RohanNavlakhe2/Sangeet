@@ -39,7 +39,8 @@ public class MusicList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_list);
         Intent intent = getIntent();
-        setTitle(intent.getStringExtra("folder"));
+        ((TextView)findViewById(R.id.folderNameTxtView)).setText(intent.getStringExtra("folder"));
+        //setTitle(intent.getStringExtra("folder"));
         if (flag == true)
             definingHeightOfTheOfList();
         mediaUtil = new MediaUtil(this);

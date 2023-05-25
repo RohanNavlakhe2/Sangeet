@@ -1,22 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn"
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/music_bg_1"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/jamuni"
+        android:alpha="0.5"/>
+
+    <TextView
+        android:id="@+id/sangeet_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Listengin"
-        android:visibility="gone"/>
+        android:text="sangeet"
+        android:drawableStart="@drawable/music_2"
+        android:drawablePadding="8dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold|italic"
+        android:fontFamily="@font/segoe_bold_italic"
+        android:layout_marginTop="15dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/sangeet_title"
         android:id="@+id/list"/>
 
-</LinearLayout>
+</RelativeLayout>
