@@ -129,7 +129,12 @@ class SangeetService:MediaBrowserServiceCompat()  {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        exoPlayer.stop()
+        //exoPlayer.stop()
+        exoPlayer.removeListener(musicPlayerEventListener)
+        exoPlayer.release()
+        stopSelf(Constants.NOTIFICATION_ID)
+        /*stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf(Constants.NOTIFICATION_ID)*/
     }
 
     override fun onDestroy() {

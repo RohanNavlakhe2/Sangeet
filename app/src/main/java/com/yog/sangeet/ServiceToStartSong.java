@@ -52,12 +52,13 @@ public class ServiceToStartSong extends Service {
         //try to display your music start notification here to avoid two notifications.
         //1 . music playing
         //2.  this one
-         Notification notification = new NotificationCompat.Builder(this, "10")
+         /*Notification notification = new NotificationCompat.Builder(this, "10")
                 .setContentTitle("title")
                 .setContentText("text")
                 .setSmallIcon(R.drawable.music)
-                .build();
-        startForeground(2001,notification);
+                .build();*/
+        //startForeground(2001,MusicList.mediaUtil.createMediaStyleNotification());
+        startForeground(10,MusicList.mediaUtil.createMediaStyleNotification());
         MusicList.mediaUtil.manageAudio();
         return START_NOT_STICKY;
     }
@@ -69,5 +70,11 @@ public class ServiceToStartSong extends Service {
         MusicList.mediaUtil.mediaPlayer.release();
         MediaUtil.manager.cancel(10);
         unregisterReceiver(headphoneRemoval);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        stopSelf();
     }
 }

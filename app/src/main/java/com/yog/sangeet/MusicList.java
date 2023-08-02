@@ -23,6 +23,7 @@ import com.yog.sangeet.util.RecyclerPlaylist;
 import java.util.ArrayList;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
 
 
 @AndroidEntryPoint
@@ -125,4 +126,23 @@ public class MusicList extends AppCompatActivity {
             }
         });
     }
+
+    //When we remove the activity from task and open the app again still the static variables remains there
+    //which creates issues (like currently running song card appears again)
+    // so making it null.
+
+    //But this also has issue, When we come back from MusicList activity then also onDestroy() gets called.
+    //And if we now open any folder then in that MusicList we won't see currently playing song card.
+    /*@Override
+    protected void onDestroy() {
+        Timber.d("Music List - on Destroy");
+        mediaTitleOnLaunch = null;
+        currentImage = null;
+        nextSongIndex = 0;
+        mediaUtil = null;
+        previousMediaPlayer = null;
+        flag = false;
+        super.onDestroy();
+
+    }*/
 }

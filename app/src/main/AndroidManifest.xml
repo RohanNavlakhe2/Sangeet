@@ -44,26 +44,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--<intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>-->
         </activity>
-
-        <!--<activity
-            android:name=".sangeet_online.SangeetMainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>-->
 
         <service
             android:name=".ServiceToStartSong"
@@ -75,9 +56,6 @@
 
         <service android:name=".sangeet_online.SangeetService"
             android:exported="true">
-           <!-- <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
-            </intent-filter>-->
         </service>
 
     </application>

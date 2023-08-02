@@ -1,5 +1,6 @@
 package com.yog.sangeet;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -112,7 +113,7 @@ public class MediaUtil implements MediaPlayer.OnPreparedListener,
         createMediaStyleNotification("paused");
         displayRunningMusic("paused_button");
     }
-    private  void displayRunningMusic(String buttonState){
+    public void displayRunningMusic(String buttonState){
         MusicList.mediaTitleOnLaunch=mediaFileTitle;
         MusicList.currentImage=buttonState;
         context.displayRunningMusicCard(mediaFileTitle);
@@ -182,10 +183,10 @@ public class MediaUtil implements MediaPlayer.OnPreparedListener,
         return mAudioFocusRequest;
     }
 
-    private  void createMediaStyleNotification(String state) {
+    private void createMediaStyleNotification(String state) {
         manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("10", "media style", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel("10", "media style", NotificationManager.IMPORTANCE_LOW);
             manager.createNotificationChannel(channel);
         }
 
@@ -203,6 +204,30 @@ public class MediaUtil implements MediaPlayer.OnPreparedListener,
         } else if (state.equals("paused"))
             builder.addAction(R.mipmap.music_paused_icon, "paused", getLaunchPi());
         manager.notify(10, builder.build());
+    }
+
+    public Notification createMediaStyleNotification() {
+
+        manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("10", "media style", NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "10").
+                setSmallIcon(R.mipmap.headphone_icon).
+                setContentTitle(mediaFileTitle).
+                setLargeIcon(
+                        RecyclerPlaylist.setImage(mediaFileLocation,70,80)
+                )
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+
+        builder.addAction(R.mipmap.music_playing_icon, "playing", getLaunchPi());
+        Notification notification = builder.build();
+        manager.notify(10,notification);
+        return notification;
     }
 
     private PendingIntent getLaunchPi() {
