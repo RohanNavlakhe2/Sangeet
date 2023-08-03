@@ -58,8 +58,9 @@ class MusicNotificationManager(
             return mediaController.sessionActivity
         }
 
-        override fun getCurrentContentText(player: Player): CharSequence? {
-            return mediaController.metadata.description.subtitle.toString()
+        override fun getCurrentContentText(player: Player): CharSequence {
+            //return mediaController.metadata.description.subtitle.toString()
+            return ""
         }
 
         override fun getCurrentLargeIcon(

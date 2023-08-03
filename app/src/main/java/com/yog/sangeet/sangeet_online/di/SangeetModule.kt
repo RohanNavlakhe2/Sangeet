@@ -1,6 +1,7 @@
 package com.yog.sangeet.sangeet_online.di
 
 import android.content.Context
+import com.google.android.exoplayer2.ExoPlayer
 import com.yog.sangeet.sangeet_online.Constants.BASE_URL
 import com.yog.sangeet.sangeet_online.data.network.SangeetApi
 import com.yog.sangeet.sangeet_online.data.repository.SangeetRepositoryImpl
@@ -11,6 +12,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ServiceScoped
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -54,6 +56,14 @@ object SangeetModule {
     fun provideMusicServiceConnection(
         @ApplicationContext context: Context
     ) = MusicServiceConnection(context)
+
+    /*@Singleton
+    @Provides
+    fun provideExoPlayer(
+        @ApplicationContext context: Context
+    ) = ExoPlayer.Builder(context).build().apply {
+        setHandleAudioBecomingNoisy(true)
+    }*/
 
 
 }

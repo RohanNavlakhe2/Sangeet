@@ -75,6 +75,9 @@ public class ServiceToStartSong extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        stopSelf();
+        if(rootIntent.getComponent().getClassName().equals(MainActivity.class.getName())){
+            stopSelf();
+        }
+
     }
 }

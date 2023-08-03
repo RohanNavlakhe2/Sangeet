@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.exoplayer2.ExoPlayer
 import com.yog.sangeet.databinding.ActivityExoPlayerBinding
 import com.yog.sangeet.sangeet_online.Constants.MEDIA_ROOT_ID
 import com.yog.sangeet.sangeet_online.SangeetService
@@ -31,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExoPlayerActivity : AppCompatActivity(){
@@ -55,6 +57,9 @@ class ExoPlayerActivity : AppCompatActivity(){
         listenVideoInfo()
         setSeekbarChangeListener()
 
+        Timber.d("Flags : ${intent.flags}")
+
+
         downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
         binding.downloadSongImg.setOnClickListener {
@@ -71,11 +76,11 @@ class ExoPlayerActivity : AppCompatActivity(){
             DownloadUtil.download(videoInfoDto!!.title ?: "",videoInfoDto!!.downloadUrl!!, downloadManager)
         }
 
-        getVideoInfo()
+        getVideoInfo(intent)
 
     }
 
-    private fun getVideoInfo() {
+    private fun getVideoInfo(intent: Intent) {
         if (intent.action == Intent.ACTION_SEND && intent.type == "text/plain") {
             val data = intent.getStringExtra(Intent.EXTRA_TEXT)
             Timber.d("Video Url : $data")
@@ -236,6 +241,18 @@ class ExoPlayerActivity : AppCompatActivity(){
     override fun onDestroy() {
         super.onDestroy()
         musicServiceConnection.unsubscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {})
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        //musicServiceConnection.unsubscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {})
+        //stopService(Intent(applicationContext,SangeetService::class.java))
+        /*exoPlayer.release()
+        SangeetService.stopSangeetService()*/
+        intent?.let {
+            getVideoInfo(it)
+        }
+
     }
 
     companion object{
