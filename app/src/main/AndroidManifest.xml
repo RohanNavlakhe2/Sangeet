@@ -22,10 +22,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sangeet"
         tools:targetApi="31">
+        <!--used taskAffinity here, taskAffinity tells in which task the activity will be launched
+        by default the taskAffinity for all activity is the package name of the app.
+        So if don't specifiy the taskAffinity here then ExoPlayerActivity will also get launched
+        in the same task as MainActivity-->
         <activity
             android:name=".ExoPlayerActivity"
             android:theme="@style/PlayerTheme"
             android:launchMode="singleTask"
+            android:taskAffinity=""
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

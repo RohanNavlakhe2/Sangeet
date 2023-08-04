@@ -58,21 +58,10 @@ class SangeetService:MediaBrowserServiceCompat()  {
     companion object {
         var curSongDuration = 0L
             private set
-
-        lateinit var instance:SangeetService
-
-        fun stopSangeetService(){
-            instance.stopSelf()
-        }
     }
-
-    init {
-        instance = this
-    }
-
     override fun onCreate() {
         super.onCreate()
-
+        Timber.d("Sangeet Service : onCreate")
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
             PendingIntent.getActivity(this, 0, it, FLAG_IMMUTABLE)
         }
@@ -104,7 +93,6 @@ class SangeetService:MediaBrowserServiceCompat()  {
         musicNotificationManager.showNotification(exoPlayer)
 
     }
-
     private fun preparePlayer(
         songs: List<MediaMetadataCompat>,
         itemToPlay: MediaMetadataCompat?,
@@ -163,6 +151,11 @@ class SangeetService:MediaBrowserServiceCompat()  {
         }
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Timber.d("Sangeet Service : onStartCommand")
+        return super.onStartCommand(intent, flags, startId)
+
+    }
 
 
 

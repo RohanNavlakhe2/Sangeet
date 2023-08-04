@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import com.yog.sangeet.sangeet_online.SangeetService
 import com.yog.sangeet.sangeet_online.util.Event
 import com.yog.sangeet.sangeet_online.util.Resource
+import timber.log.Timber
 
 class MusicServiceConnection(
     context: Context
@@ -41,7 +42,9 @@ class MusicServiceConnection(
         ),
         mediaBrowserConnectionCallback,
         null
-    ).apply { connect() }
+    ).apply {
+        connect()
+    }
 
     val transportControls: MediaControllerCompat.TransportControls
         get() = mediaController.transportControls
@@ -59,7 +62,7 @@ class MusicServiceConnection(
     ) : MediaBrowserCompat.ConnectionCallback() {
 
         override fun onConnected() {
-            Log.d("MusicServiceConnection", "CONNECTED")
+            Timber.tag("MusicServiceConnection").d("CONNECTED")
             mediaController = MediaControllerCompat(context, mediaBrowser.sessionToken).apply {
                 registerCallback(MediaContollerCallback())
             }
@@ -67,7 +70,7 @@ class MusicServiceConnection(
         }
 
         override fun onConnectionSuspended() {
-            Log.d("MusicServiceConnection", "SUSPENDED")
+            Timber.tag("MusicServiceConnection").d("SUSPENDED")
 
             _isConnected.postValue(Event(Resource.Error(
                 "The connection was suspended", false
@@ -75,7 +78,7 @@ class MusicServiceConnection(
         }
 
         override fun onConnectionFailed() {
-            Log.d("MusicServiceConnection", "FAILED")
+            Timber.tag("MusicServiceConnection").d("FAILED")
 
             _isConnected.postValue(Event(Resource.Error(
                 "Couldn't connect to media browser", false

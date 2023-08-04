@@ -57,7 +57,7 @@ class ExoPlayerActivity : AppCompatActivity(){
         listenVideoInfo()
         setSeekbarChangeListener()
 
-        Timber.d("Flags : ${intent.flags}")
+        Timber.d("ExoPlayerActivity - onCreate")
 
 
         downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -249,6 +249,7 @@ class ExoPlayerActivity : AppCompatActivity(){
         //stopService(Intent(applicationContext,SangeetService::class.java))
         /*exoPlayer.release()
         SangeetService.stopSangeetService()*/
+        Timber.d("ExoPlayerActivity - on New Intent")
         intent?.let {
             getVideoInfo(it)
         }
