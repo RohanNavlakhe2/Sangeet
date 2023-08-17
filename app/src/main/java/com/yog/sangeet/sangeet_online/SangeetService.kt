@@ -3,6 +3,7 @@ package com.yog.sangeet.sangeet_online
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Intent
+import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v4.media.MediaBrowserCompat
@@ -22,7 +23,13 @@ import com.yog.sangeet.sangeet_online.exoplayer.MusicNotificationManager
 import com.yog.sangeet.sangeet_online.exoplayer.callbacks.MusicPlayerEventListener
 import com.yog.sangeet.sangeet_online.exoplayer.callbacks.MusicPlayerNotificationListener
 import com.yog.sangeet.sangeet_online.util.MusicSource
+import com.yog.sangeet.util.SangeetEventBus
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,9 +41,6 @@ class SangeetService:MediaBrowserServiceCompat()  {
 
     @Inject
     lateinit var exoPlayer:ExoPlayer
-
-    /*@Inject
-    lateinit var defaultDataSourceFactory:DefaultDataSourceFactory*/
 
     private val defaultDataSourceFactory: DataSource.Factory by lazy {
         DefaultDataSourceFactory(this, "exoplayer-sample")
@@ -53,12 +57,12 @@ class SangeetService:MediaBrowserServiceCompat()  {
 
     private lateinit var musicPlayerEventListener: MusicPlayerEventListener
 
-
-
     companion object {
         var curSongDuration = 0L
             private set
     }
+
+    var onCreateGotCalled = false
     override fun onCreate() {
         super.onCreate()
         Timber.d("Sangeet Service : onCreate")
@@ -91,6 +95,23 @@ class SangeetService:MediaBrowserServiceCompat()  {
         musicPlayerEventListener = MusicPlayerEventListener(this)
         exoPlayer.addListener(musicPlayerEventListener)
         musicNotificationManager.showNotification(exoPlayer)
+
+       /* GlobalScope.launch {
+            SangeetEventBus.subscribe<String> {
+                if(it == "stop"){
+                    Timber.tag("SangeetService").d("onSubscribe SangeetEventBus")
+                    withContext(Dispatchers.Main){
+                        musicNotificationManager.setPlayerNull()
+                        destroyExoPlayer()
+                        stopSelf()
+                    }
+                    SangeetEventBus.publish("start")
+                }
+            }
+        }*/
+
+        onCreateGotCalled = true
+
 
     }
     private fun preparePlayer(
@@ -131,9 +152,7 @@ class SangeetService:MediaBrowserServiceCompat()  {
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         if (rootIntent!!.component!!.className == ExoPlayerActivity::class.java.name) {
-            exoPlayer.removeListener(musicPlayerEventListener)
-            exoPlayer.release()
-            //stopSelf(Constants.NOTIFICATION_ID)
+            destroyExoPlayer()
             stopSelf()
         }
     }
@@ -141,6 +160,10 @@ class SangeetService:MediaBrowserServiceCompat()  {
     override fun onDestroy() {
         super.onDestroy()
         Timber.d("Sangeet Service destroy")
+        destroyExoPlayer()
+    }
+
+    private fun destroyExoPlayer(){
         exoPlayer.removeListener(musicPlayerEventListener)
         exoPlayer.release()
     }
@@ -153,8 +176,42 @@ class SangeetService:MediaBrowserServiceCompat()  {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.d("Sangeet Service : onStartCommand")
-        return super.onStartCommand(intent, flags, startId)
+        if(onCreateGotCalled){
+            onCreateGotCalled = false
+            return START_STICKY
+        }
 
+
+        val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
+            PendingIntent.getActivity(this, 0, it, FLAG_IMMUTABLE)
+        }
+
+        mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
+            setSessionActivity(activityIntent)
+            isActive = true
+        }
+
+        if(!mediaSession.isActive){
+            sessionToken = mediaSession.sessionToken
+        }
+
+        musicNotificationManager = MusicNotificationManager(
+            this,
+            mediaSession.sessionToken,
+            MusicPlayerNotificationListener(this)
+        ) {
+            curSongDuration = exoPlayer.duration
+        }
+
+        preparePlayer(MusicSource.songs,MusicSource.songs[0],true)
+
+        mediaSessionConnector = MediaSessionConnector(mediaSession)
+        mediaSessionConnector.setQueueNavigator(MusicQueueNavigator())
+        mediaSessionConnector.setPlayer(exoPlayer)
+
+        musicPlayerEventListener = MusicPlayerEventListener(this)
+        exoPlayer.addListener(musicPlayerEventListener)
+        musicNotificationManager.showNotification(exoPlayer)
+        return START_STICKY
     }
-
 }

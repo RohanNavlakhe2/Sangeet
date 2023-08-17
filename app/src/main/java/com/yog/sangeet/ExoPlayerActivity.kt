@@ -1,5 +1,7 @@
 package com.yog.sangeet
 
+
+import android.app.ActivityManager
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -14,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.google.android.exoplayer2.ExoPlayer
 import com.yog.sangeet.databinding.ActivityExoPlayerBinding
 import com.yog.sangeet.sangeet_online.Constants.MEDIA_ROOT_ID
 import com.yog.sangeet.sangeet_online.SangeetService
@@ -27,12 +28,15 @@ import com.yog.sangeet.sangeet_online.exoplayer.extension.isPlaying
 import com.yog.sangeet.sangeet_online.exoplayer.extension.isPrepared
 import com.yog.sangeet.sangeet_online.util.MusicSource
 import com.yog.sangeet.sangeet_online.util.Resource
+import com.yog.sangeet.util.SangeetEventBus
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ExoPlayerActivity : AppCompatActivity(){
@@ -57,7 +61,7 @@ class ExoPlayerActivity : AppCompatActivity(){
         listenVideoInfo()
         setSeekbarChangeListener()
 
-        Timber.d("ExoPlayerActivity - onCreate")
+        Timber.tag(TAG).d("ExoPlayerActivity - onCreate")
 
 
         downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -78,12 +82,23 @@ class ExoPlayerActivity : AppCompatActivity(){
 
         getVideoInfo(intent)
 
+        /*GlobalScope.launch {
+            SangeetEventBus.subscribe<String> {
+                if(it == "start"){
+                    Timber.tag(TAG).d("ExoPlayerActivity OnSubscribe")
+                    Timber.tag(TAG).d("Is Sangeet Service Running : ${isMyServiceRunning(SangeetService::class.java)}")
+                    getVideoInfo(youtubeIntent!!)
+                }
+            }
+        }*/
+
+
     }
 
     private fun getVideoInfo(intent: Intent) {
         if (intent.action == Intent.ACTION_SEND && intent.type == "text/plain") {
             val data = intent.getStringExtra(Intent.EXTRA_TEXT)
-            Timber.d("Video Url : $data")
+            Timber.tag(TAG).d("Video Url : $data")
             sangeetViewModel.getVideoInfo(data)
         }
     }
@@ -112,10 +127,15 @@ class ExoPlayerActivity : AppCompatActivity(){
 
                 videoInfoDto?.downloadUrl?.let {
                     MusicSource.setMusic(listOf(videoInfoDto!!))
-                    startSangeetService()
+                    if(isMyServiceRunning(SangeetService::class.java)){
+                        startSangeetService()
+                        startService(Intent(applicationContext,SangeetService::class.java))
+                    }else{
+                        startSangeetService()
+                    }
                 }
 
-                Timber.d("Video Data : ${resource.data}")
+                Timber.tag(TAG).d("Video Data : ${resource.data}")
             }
 
             is Resource.Error -> {
@@ -130,6 +150,7 @@ class ExoPlayerActivity : AppCompatActivity(){
     private fun startSangeetService(){
 
         musicServiceConnection = MusicServiceConnection(this)
+
         musicPlaybackState = musicServiceConnection.playbackState
         listenPlayBackState()
         updatePlayBackPosition()
@@ -171,6 +192,8 @@ class ExoPlayerActivity : AppCompatActivity(){
                 Timber.tag(TAG).d("Video Info : $videoInfo")
             }
         })
+
+
     }
 
     private fun listenPlayBackState(){
@@ -245,20 +268,30 @@ class ExoPlayerActivity : AppCompatActivity(){
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        //musicServiceConnection.unsubscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {})
-        //stopService(Intent(applicationContext,SangeetService::class.java))
-        /*exoPlayer.release()
-        SangeetService.stopSangeetService()*/
-        Timber.d("ExoPlayerActivity - on New Intent")
+        Timber.tag(TAG).d("ExoPlayerActivity - on New Intent")
         intent?.let {
             getVideoInfo(it)
         }
 
+        /* GlobalScope.launch(Dispatchers.Main) {
+           SangeetEventBus.publish("stop")
+       }*/
+
     }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+
 
     companion object{
         const val TAG = "Sangeet"
     }
-
-
 }
