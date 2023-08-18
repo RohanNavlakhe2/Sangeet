@@ -35,12 +35,30 @@
         android:layout_marginTop="15dp"
         />
 
+    <LinearLayout android:id="@+id/searchWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:weightSum="100"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/sangeet_title">
+        <EditText android:id="@+id/searchEt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:paddingStart="8dp"
+            android:hint="Search music"
+            android:background="@drawable/search_bg"
+            />
+    </LinearLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="25dp"
         android:layout_marginTop="25dp"
-        android:layout_below="@+id/sangeet_title"
+        android:layout_below="@+id/searchWrapper"
         android:id="@+id/list"/>
 
 </RelativeLayout>

@@ -78,12 +78,6 @@ public class RecyclerPlaylist extends RecyclerView.Adapter<RecyclerPlaylist.Hold
         RecyclerView.LayoutParams layoutParams=new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(layoutParams);
         return new Holder(view);
-       /* return new RecyclerView.ViewHolder(view) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        };*/
     }
 
     @Override
@@ -119,9 +113,6 @@ public class RecyclerPlaylist extends RecyclerView.Adapter<RecyclerPlaylist.Hold
                         }
                     })
                     .into(binding.songImage);
-
-           /* binding.songImage.setImageBitmap
-                     (setImage(songsListToDisplay.get(position).getMediaFile(),60,75));*/
 
             binding.audioCard.setOnClickListener(new View.OnClickListener() {
                 @Override

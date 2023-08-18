@@ -44,25 +44,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "Main Activity - On Start");
-        Intent i = getIntent();
-        Log.d("YouTube", "Action : " + i.getAction());
-        Log.d("YouTube", "Type : " + i.getType());
-        if (getIntent().getAction().equals(Intent.ACTION_SEND) && getIntent().getType().equals("text/plain")) {
-            String data = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-            Log.d("YouTube", "Data : " + data);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "Main Activity - On Resume");
-    }
-
-    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         requestPermission();
@@ -173,10 +154,5 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }
