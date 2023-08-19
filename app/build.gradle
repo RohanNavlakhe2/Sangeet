@@ -63,9 +63,6 @@ dependencies {
     implementation "com.google.android.exoplayer:extension-mediasession:2.18.1"
     //implementation "com.google.android.exoplayer:exoplayer-ui:2.18.1"
 
-    // Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-
     //Multidex
     //implementation 'com.android.support:multidex:1.0.3'
 
@@ -102,4 +99,12 @@ dependencies {
 
     //For InstantTaskExecutorRule
     testImplementation "android.arch.core:core-testing:1.1.1"
+
+    //RxJava
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 }

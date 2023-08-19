@@ -4,6 +4,7 @@ import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_AUDIO;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,7 +13,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -20,11 +24,18 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.yog.sangeet.util.RecyclerPlaylist;
+import com.yog.sangeet.util.SangeetAfterTextChangedWatcher;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import timber.log.Timber;
 
 
 @AndroidEntryPoint
@@ -34,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<ArrayList<AudioFile>> songsInsideFolder;
     public static final String TAG = "MainActivity";
 
+    private EditText searchEt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Main Activity - On Create");
         setContentView(R.layout.activity_main);
+        searchEt = findViewById(R.id.searchEt);
         setTitle("Folders");
         requestPermission();
+        setSearchListener();
     }
 
     @Override
@@ -103,8 +118,23 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
     }
 
+
+    private void setSearchListener() {
+        Disposable disposable = RxTextView.textChangeEvents(searchEt)
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged(textViewTextChangeEvent -> {
+                    return textViewTextChangeEvent.getText().toString().trim();
+                })
+                //.filter(textChangedEvent -> !textChangedEvent.getText().toString().trim().isEmpty())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(textChangedEvent -> {
+                    Timber.d("Search Query : " + textChangedEvent.getText());
+                });
+    }
+
     private void requestPermission() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, READ_MEDIA_AUDIO) ==
                     PackageManager.PERMISSION_GRANTED) {
                 loadMedia();
@@ -116,13 +146,13 @@ public class MainActivity extends AppCompatActivity {
                         }, 1);
             }
 
-            if(ContextCompat.checkSelfPermission(this,POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{
-                               POST_NOTIFICATIONS
+                                POST_NOTIFICATIONS
                         }, 1);
             }
-        }else{
+        } else {
             if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) ==
                     PackageManager.PERMISSION_GRANTED) {
                 loadMedia();
