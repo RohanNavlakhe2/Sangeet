@@ -266,7 +266,7 @@ class ExoPlayerActivity : AppCompatActivity(){
         musicServiceConnection.unsubscribe(MEDIA_ROOT_ID, object : MediaBrowserCompat.SubscriptionCallback() {})
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.tag(TAG).d("ExoPlayerActivity - on New Intent")
         intent?.let {
